@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to Twiiit</title>
+<link rel="stylesheet" href="/stylesheets/page.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+<script>
+  $(document).ready(function() {
+    $('.tweet_text').each(function(i, el) {
+      var $e = $(el);
+      $e.html($e.text().replace(/@(\S+)/g, function(str, email) {
+        return "<a href='/user/" + email + "'>@" + email + "</a>";
+      }));
+    });
+  });
+</script>
+</head>
+<body>
+
+<div id="header">
+    <h1><a href="/">{{title}}</a></h1>
+    <div class="login">{{{login_snippet}}}</div>
+</div>
+<div id="body">
+    {{#showForm}}
+    <form class="form" method="post" action="tweet">
+    <ul>
+        <li>
+            <label for="message">What's on your stomach?</label>
+            <textarea type="text" name="message" ></textarea>
+        </li>
+        <li>
+            <input type="submit" value="Twiiit" />
+        </li>
+    </ul>
+    </form>
+    {{/showForm}} 
+    
+    {{#showFollow}}
+    <a class="follow" href="/follow/{{username}}">Follow {{username}}</a>
+    {{/showFollow}}   
+    {{#showUnfollow}}
+    <a class="follow" href="/unfollow/{{username}}">Unfollow {{username}} :(</a>
+    {{/showUnfollow}}   
+    
+    <h2>{{subtitle}} {{#showAllLink}}<a class="all" href="/all">View all</a>{{/showAllLink}}</h2>
+    <ul class="tweets">
+      {{#twiiits}}
+        <li>
+            <a href="/user/{{user}}" "class="user">{{user}}</a> said:
+            <p class="tweet_text">{{text}}</p>
+            <span class="date">at {{date}}</span>
+        </li>
+      {{/twiiits}}
+    </ul>
+    <div class="aside">
+    {{#noFollowed}}
+    <ul class="following">
+      Following {{noFollowed}} user(s)
+      {{#followed}}
+        <li>
+            <a href="/user/{{.}}" "class="user">{{.}}</a>
+        </li>
+      {{/followed}}
+    </ul>
+    {{/noFollowed}}
+
+    {{#noFollowers}}
+    <ul class="following">
+      Followed by {{noFollowers}} user(s)
+      {{#followers}}
+        <li>
+            <a href="/user/{{.}}" "class="user">{{.}}</a>
+        </li>
+      {{/followers}}
+    </ul>
+    {{/noFollowers}}
+
+    {{#noMentions}}
+    <ul class="mentions">
+      <a href="/mentions">Mentioned {{noMentions}}</a> time(s)
+    </ul>
+    {{/noMentions}}        
+    </div>
+</div>
+
+</body>
+</html>
